@@ -1,112 +1,84 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
-import type {Node} from 'react';
 import {
-  SafeAreaView,
-  ScrollView,
-  StatusBar,
   StyleSheet,
   Text,
-  useColorScheme,
+  SafeAreaView,
   View,
+  StatusBar,
+  Button,
 } from 'react-native';
+import React from 'react';
+import {useFormik} from 'formik';
+import * as Yup from 'yup';
+import colors from 'constants/colors';
+import Form from 'components/Form';
 
-import {
-  Colors,
-  DebugInstructions,
-  Header,
-  LearnMoreLinks,
-  ReloadInstructions,
-} from 'react-native/Libraries/NewAppScreen';
-
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
+export default function App() {
+  const {
+    handleSubmit,
+    values,
+    errors,
+    handleChange,
+    setFieldTouched,
+    touched,
+    setFieldValue,
+  } = useFormik({
+    initialValues: {
+      amount: '',
+      month: '',
+      percentage: '',
+    },
+    validationSchema: Yup.object({
+      amount: Yup.number('La cantidad debe ser un número')
+        .required('Ingrese la cantidad')
+        .positive('La cantidad debe ser positiva')
+        .integer(),
+      month: Yup.number().integer(),
+      percentage: Yup.number('El Interés debe ser un número')
+        .required('Ingrese el Interés')
+        .positive('El Interés debe ser positivo'),
+    }),
+    onSubmit: valuesForm => console.log(valuesForm),
+  });
   return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
+    <>
+      <StatusBar barStyle="light-content" />
+      <SafeAreaView style={styles.head}>
+        <View style={styles.backgroundHead} />
+        <Text style={styles.headTitle}>Cotización de prestamos</Text>
+        <Form
+          values={values}
+          errors={errors}
+          handleChange={handleChange}
+          setFieldTouched={setFieldTouched}
+          touched={touched}
+          setFieldValue={setFieldValue}
+        />
+      </SafeAreaView>
+      <View>
+        <Button title="Calcular" onPress={handleSubmit} />
+      </View>
+    </>
   );
-};
-
-const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
-  };
-
-  return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <Header />
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Step One">
-            Edit <Text style={styles.highlight}>App.js</Text> to change this
-            screen and then come back to see your edits.
-          </Section>
-          <Section title="See Your Changes">
-            <ReloadInstructions />
-          </Section>
-          <Section title="Debug">
-            <DebugInstructions />
-          </Section>
-          <Section title="Learn More">
-            Read the docs to discover what to do next:
-          </Section>
-          <LearnMoreLinks />
-        </View>
-      </ScrollView>
-    </SafeAreaView>
-  );
-};
+}
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
+  head: {
+    height: 290,
+    alignItems: 'center',
   },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
+  backgroundHead: {
+    backgroundColor: colors.PRIMARY_COLOR,
+    borderBottomLeftRadius: 30,
+    borderBottomRightRadius: 30,
+    height: 200,
+    width: '100%',
+    position: 'absolute',
+    zIndex: -1,
   },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
+  headTitle: {
+    fontSize: 25,
+    fontWeight: 'bold',
+    color: '#ffffff',
+    paddingTop: 15,
   },
 });
-
-export default App;
