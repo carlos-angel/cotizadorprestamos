@@ -11,6 +11,7 @@ import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import colors from 'constants/colors';
 import Form from 'components/Form';
+import Footer from './src/components/Footer';
 
 export default function App() {
   const {
@@ -54,9 +55,7 @@ export default function App() {
           setFieldValue={setFieldValue}
         />
       </SafeAreaView>
-      <View>
-        <Button title="Calcular" onPress={handleSubmit} />
-      </View>
+      <Footer onPress={handleSubmit} />
     </>
   );
 }
