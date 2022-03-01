@@ -28,7 +28,7 @@ export default function Form({
   setFieldTouched,
   setFieldValue,
 }) {
-  const {month, percentage, amount} = values;
+  const {months, percentage, amount} = values;
 
   return (
     <View style={styles.form}>
@@ -54,9 +54,10 @@ export default function Form({
       </View>
       <View>
         <Select
-          onBlur={() => setFieldTouched('month', true, true)}
-          selectedValue={month}
-          name="month"
+          onBlur={() => setFieldTouched('months', true, true)}
+          placeholder="Selecciona los plazos"
+          selectedValue={months}
+          name="months"
           onValueChange={setFieldValue}
           items={selectedMonths}
         />

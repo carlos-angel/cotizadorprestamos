@@ -8,12 +8,14 @@ export default function Select({
   items,
   onBlur,
   name,
+  placeholder,
 }) {
   return (
     <Picker
       style={Platform.OS === 'android' ? style.inputAndroid : style.inputIOS}
       selectedValue={selectedValue}
       onBlur={onBlur}
+      prompt={placeholder}
       onValueChange={itemValue => onValueChange(name, itemValue)}>
       {items.map(({label, value}, index) => (
         <Picker.Item key={index} label={label} value={value} />

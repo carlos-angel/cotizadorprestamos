@@ -1,12 +1,5 @@
-import {
-  StyleSheet,
-  Text,
-  SafeAreaView,
-  View,
-  StatusBar,
-  Button,
-} from 'react-native';
-import React from 'react';
+import {StyleSheet, Text, SafeAreaView, View, StatusBar} from 'react-native';
+import React, {useState} from 'react';
 import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import colors from 'constants/colors';
@@ -14,6 +7,8 @@ import Form from 'components/Form';
 import Footer from './src/components/Footer';
 
 export default function App() {
+  const [result, setResult] = useState('');
+
   const {
     handleSubmit,
     values,
@@ -25,7 +20,7 @@ export default function App() {
   } = useFormik({
     initialValues: {
       amount: '',
-      month: '',
+      months: 3,
       percentage: '',
     },
     validationSchema: Yup.object({
@@ -33,12 +28,25 @@ export default function App() {
         .required('Ingrese la cantidad')
         .positive('La cantidad debe ser positiva')
         .integer(),
-      month: Yup.number().integer(),
+      months: Yup.number().integer().required('Seleccione el plazo'),
       percentage: Yup.number('El Interés debe ser un número')
         .required('Ingrese el Interés')
         .positive('El Interés debe ser positivo'),
     }),
-    onSubmit: valuesForm => console.log(valuesForm),
+    onSubmit: valuesForm => {
+      const {amount, months, percentage} = valuesForm;
+
+      const interest = percentage / 100;
+      const fee = amount / ((1 - Math.pow(interest + 1, -months)) / interest);
+
+      const monthlyFee = fee.toFixed(2).replace('.', ',');
+      const totalPayable = (fee * months).toFixed(2).replace('.', ',');
+
+      setResult({
+        monthlyFee,
+        totalPayable,
+      });
+    },
   });
   return (
     <>
