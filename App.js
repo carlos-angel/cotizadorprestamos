@@ -4,10 +4,12 @@ import {useFormik} from 'formik';
 import * as Yup from 'yup';
 import colors from 'constants/colors';
 import Form from 'components/Form';
-import Footer from './src/components/Footer';
+import Footer from 'components/Footer';
+import Cotization from 'components/Cotization';
+import ErrorMessage from 'components/ErrorMessage';
 
 export default function App() {
-  const [result, setResult] = useState('');
+  const [result, setResult] = useState(null);
 
   const {
     handleSubmit,
@@ -45,9 +47,14 @@ export default function App() {
       setResult({
         monthlyFee,
         totalPayable,
+        ...valuesForm,
       });
     },
   });
+
+  const isErrorAmount = errors.amount && touched.amount;
+  const isErrorPercentage = errors.percentage && touched.percentage;
+
   return (
     <>
       <StatusBar barStyle="light-content" />
@@ -63,6 +70,14 @@ export default function App() {
           setFieldValue={setFieldValue}
         />
       </SafeAreaView>
+
+      <View style={styles.result}>
+        {isErrorAmount && <ErrorMessage message={errors.amount} />}
+        {isErrorPercentage && <ErrorMessage message={errors.percentage} />}
+        {!result && !isErrorAmount && !isErrorPercentage && (
+          <Cotization {...result} />
+        )}
+      </View>
       <Footer onPress={handleSubmit} />
     </>
   );
@@ -87,5 +102,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     color: '#ffffff',
     paddingTop: 15,
+  },
+  result: {
+    marginHorizontal: 40,
   },
 });
