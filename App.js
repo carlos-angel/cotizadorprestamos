@@ -74,7 +74,7 @@ export default function App() {
       <View style={styles.result}>
         {isErrorAmount && <ErrorMessage message={errors.amount} />}
         {isErrorPercentage && <ErrorMessage message={errors.percentage} />}
-        {!result && !isErrorAmount && !isErrorPercentage && (
+        {result && !isErrorAmount && !isErrorPercentage && (
           <Cotization {...result} />
         )}
       </View>
