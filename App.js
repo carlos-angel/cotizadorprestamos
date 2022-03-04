@@ -35,7 +35,7 @@ export default function App() {
         .required('Ingrese el Interés')
         .positive('El Interés debe ser positivo'),
     }),
-    onSubmit: valuesForm => {
+    onSubmit: (valuesForm, action) => {
       const {amount, months, percentage} = valuesForm;
 
       const interest = percentage / 100;
@@ -49,6 +49,7 @@ export default function App() {
         totalPayable,
         ...valuesForm,
       });
+      action.resetForm();
     },
   });
 
